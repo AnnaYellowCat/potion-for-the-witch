@@ -142,6 +142,7 @@ public class Hero : MonoBehaviour
     private void Jump()
     {
         jumpSound.Play(); //звук прыжка
+        rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
         rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
