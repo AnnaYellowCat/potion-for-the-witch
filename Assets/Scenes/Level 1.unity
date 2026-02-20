@@ -19746,7 +19746,7 @@ Transform:
   m_GameObject: {fileID: 267904102}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 53.770004, y: -0.1, z: 0}
+  m_LocalPosition: {x: 53.770004, y: 1, z: 0}
   m_LocalScale: {x: 8, y: 8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -19825,7 +19825,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followingTarget: {fileID: 0}
   parallaxStrength: 0.5
-  disableVerticalParallax: 0
 --- !u!1 &275971247
 GameObject:
   m_ObjectHideFlags: 0
@@ -20675,7 +20674,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followingTarget: {fileID: 0}
   parallaxStrength: 0.1
-  disableVerticalParallax: 1
 --- !u!1 &399120763
 GameObject:
   m_ObjectHideFlags: 0
@@ -68647,7 +68645,7 @@ Transform:
   m_GameObject: {fileID: 537243671}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 53.800003, y: 2.49, z: 0}
+  m_LocalPosition: {x: 53.800003, y: 2.9, z: 0}
   m_LocalScale: {x: 6, y: 6, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -68726,7 +68724,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followingTarget: {fileID: 0}
   parallaxStrength: 0.35
-  disableVerticalParallax: 0
 --- !u!1 &578946337
 GameObject:
   m_ObjectHideFlags: 0
@@ -70317,7 +70314,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followingTarget: {fileID: 0}
   parallaxStrength: 0.65
-  disableVerticalParallax: 0
 --- !u!1 &813814116
 GameObject:
   m_ObjectHideFlags: 0
@@ -74688,7 +74684,7 @@ Transform:
   m_GameObject: {fileID: 1435927259}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 19.55, y: -36.03, z: 0}
+  m_LocalPosition: {x: 19.55, y: -34.9, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -78264,14 +78260,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1884296378}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 090bc83836b095a4899d78f9725ef948, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   followingTarget: {fileID: 0}
-  parallaxStrength: 0.9
-  disableVerticalParallax: 0
+  parallaxStrength: 0.8
 --- !u!1 &1907489526
 GameObject:
   m_ObjectHideFlags: 0
@@ -78544,7 +78539,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   followingTarget: {fileID: 0}
   parallaxStrength: 0.75
-  disableVerticalParallax: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
