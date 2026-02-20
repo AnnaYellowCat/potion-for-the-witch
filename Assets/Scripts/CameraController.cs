@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour
     {
         if (!player)
         {
-            player = FindObjectOfType<Hero>().transform;
+            player = FindFirstObjectByType<Hero>().transform;
         }
     }
 
