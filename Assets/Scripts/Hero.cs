@@ -119,11 +119,11 @@ public class Hero : MonoBehaviour
 
         if(isOver == true){
             if(amountRight == 3){
-                Manag.LoadScene(4);
+                Manag.LoadScene("WinFull");
                 // КОТИК ПРИНЕС ВСЕ НУЖНЫЕ ПРЕДМЕТЫ, ВСЕ ПРАВИЛЬНО, ПОБЕДА--------------------------------------------------------------------------------------------------------
             }
             else{
-                Manag.LoadScene(3);
+                Manag.LoadScene("Defeat");
                 // КОТИК ПРИНЕС ЧТО-ТО НЕ ТО, ПРОИГРЫШ--------------------------------------------------------------------------------------------------------------------
             }
         }
@@ -214,7 +214,7 @@ public class Hero : MonoBehaviour
     private IEnumerator TakeDeathAnimation(){
         yield return new WaitForSeconds(1.1f);
         Destroy(this.gameObject);
-        Manag.LoadScene(2);
+        Manag.LoadScene("Death");
         // КОТИК УМЕР И НЕ ДОШЕЛ ДО КОТЛА, ПРОИГРЫШ-------------------------------------------------------------------------------------------------------------------
     }
 
