@@ -62,9 +62,25 @@ public class Centipede : MonoBehaviour
 
     private void Move()
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position + transform.up * 0.1f + transform.right * dir.x * 0.7f, 0.1f);
-        if (colliders.Length > 1) dir *= -1f;
-        transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, Time.deltaTime*speed);
+        Collider2D[] colliders = Physics2D.OverlapCircleAll(transform.position + transform.right * dir.x * 0.9f, 0.1f);
+
+        bool isTouchingWallNow = false;
+        foreach (var col in colliders)
+        {
+            if (col.gameObject != this.gameObject && col.gameObject != Hero.Instance.gameObject)
+            {
+                isTouchingWallNow = true;
+                break;
+            }
+        }
+
+        if (isTouchingWallNow)
+        {
+            dir *= -1f;
+            sprite.flipX = dir.x > 0.0f;
+        }
+
+        transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, Time.deltaTime * speed);
         sprite.flipX = dir.x > 0.0f;
     }
 
@@ -72,7 +88,7 @@ public class Centipede : MonoBehaviour
     {
         if (collision.gameObject == Hero.Instance.gameObject)
         {
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, Time.deltaTime*speed);
+            transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, Time.deltaTime * speed);
             if (GameObject.Find("Hero").transform.position.x < this.transform.position.x && dir.x > 0.0f){
                 dir *= -1f;
                 sprite.flipX = false;
@@ -88,15 +104,16 @@ public class Centipede : MonoBehaviour
             else{
                 Hero.Instance.GetHalfDamage();
             }
-            
-
 
             isAttacking = true;
             State = StatesEnemy.attack;
-
-            attackSound.Play(); //звук атаки
-
+            attackSound.Play();
             StartCoroutine(AttackAnimation());
+        }
+        else
+        {
+            dir *= -1f;
+            sprite.flipX = dir.x > 0.0f;
         }
     }
 
