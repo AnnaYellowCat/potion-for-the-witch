@@ -5,7 +5,6 @@ using UnityEngine.UI;
 public class LevelTransition : MonoBehaviour
 {
     private GameManager Manag;
-    [SerializeField] public int numberSceneToLoad;
     [SerializeField] public GameObject interactPrompt;
     private bool isPlayerInZone = false;
 
@@ -22,7 +21,7 @@ public class LevelTransition : MonoBehaviour
     {
         if (isPlayerInZone && Input.GetKeyDown(KeyCode.E))
         {
-            Manag.LoadScene(numberSceneToLoad);
+            Manag.LoadScene("Level2");
         }
     }
 

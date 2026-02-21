@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public void LoadScene(int sceneNumber)
+    public void LoadScene(string sceneName)
     {
-        SceneManager.LoadScene(sceneNumber);
-        if (sceneNumber == 5)
+        SceneManager.LoadScene(sceneName);
+        if (sceneName == "Level1")
         {
             Destroy(GameObject.Find("Music Menu"));
         }
