@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Spike : MonoBehaviour
 {
-    [SerializeField] private float damageInterval = 0.4f;
+    [SerializeField] private float damageInterval = 0.7f;
     private bool isHeroOnSpike = false;
     private Coroutine damageCoroutine;
 
