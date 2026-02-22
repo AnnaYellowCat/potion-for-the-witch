@@ -6,6 +6,7 @@ public class LevelTransition : MonoBehaviour
 {
     private GameManager Manag;
     [SerializeField] public GameObject interactPrompt;
+    [SerializeField] public string sceneName;
     private bool isPlayerInZone = false;
 
     void Start()
@@ -21,7 +22,7 @@ public class LevelTransition : MonoBehaviour
     {
         if (isPlayerInZone && Input.GetKeyDown(KeyCode.E))
         {
-            Manag.LoadScene("Level2");
+            Manag.LoadScene(sceneName);
         }
     }
 
