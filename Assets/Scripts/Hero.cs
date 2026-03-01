@@ -249,6 +249,30 @@ public class Hero : MonoBehaviour
             damageSound.Play(); //дали по бошке
         }
     }
+    public double GetCurrentHealth()
+    {
+        return lives;
+    }
+
+    public void SetHealth(double health)
+    {
+        lives = health;
+        helth = lives;
+        UpdateHearts();
+    }
+
+    private void UpdateHearts()
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            hearts[i].sprite = (i < helth) ? aliveHeart : deadHeart;
+        }
+    }
+
+    public void SetPosition(Vector2 position)
+    {
+        transform.position = position;
+    }
 
 }
 

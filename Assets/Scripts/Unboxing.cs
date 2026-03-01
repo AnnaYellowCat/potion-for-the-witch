@@ -2,13 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NewBehaviourScript : MonoBehaviour
+public class Unboxing : MonoBehaviour
 {
     private Animator anim;
     public GameObject activeGameObject;
 
     private bool isPlayerInRange = false;
     private GameObject hintPanel;
+
+    public bool IsOpened { get; private set; } = false;
 
     private void Awake()
     {
@@ -29,19 +31,65 @@ public class NewBehaviourScript : MonoBehaviour
     {
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.E))
         {
-            Interact();
+            if (!IsOpened)
+            {
+                Interact();
+            }
+            else
+            {
+                TakeItemFromChest();
+            }
         }
     }
 
     private void Interact()
     {
-        BoxState = States.unboxing;
-        Invoke("ActivateObject", 0.5f);
+        if (!IsOpened)
+        {
+            IsOpened = true;
+            BoxState = States.unboxing;
+            Invoke("ActivateObject", 0.5f);
+
+            if (hintPanel != null)
+            {
+                hintPanel.SetActive(false);
+            }
+        }
     }
 
     public void ActivateObject()
     {
-        activeGameObject.SetActive(true);
+        if (activeGameObject != null)
+        {
+            activeGameObject.SetActive(true);
+        }
+    }
+
+    private void TakeItemFromChest()
+    {
+        Transform itemTransform = null;
+
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("ChestItem"))
+            {
+                itemTransform = child;
+                break;
+            }
+        }
+
+        if (itemTransform != null)
+        {
+            GameObject item = itemTransform.gameObject;
+
+            string itemName = item.name;
+
+            Objects objectsScript = FindObjectOfType<Objects>();
+            if (objectsScript != null)
+            {
+                objectsScript.TakeChestItem(item);
+            }
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -49,7 +97,7 @@ public class NewBehaviourScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isPlayerInRange = true;
-            if (hintPanel != null)
+            if (hintPanel != null && !IsOpened)
             {
                 hintPanel.SetActive(true);
             }
@@ -78,5 +126,19 @@ public class NewBehaviourScript : MonoBehaviour
     {
         boxing,
         unboxing
+    }
+
+    public void SetOpened()
+    {
+        IsOpened = true;
+        BoxState = States.unboxing;
+        if (activeGameObject != null)
+        {
+            activeGameObject.SetActive(true);
+        }
+        if (hintPanel != null)
+        {
+            hintPanel.SetActive(false);
+        }
     }
 }

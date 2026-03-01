@@ -431,7 +431,7 @@ GameObject:
   - component: {fileID: 61960512}
   - component: {fileID: 61960511}
   m_Layer: 6
-  m_Name: Centipede
+  m_Name: Centipede1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -467,6 +467,9 @@ MonoBehaviour:
   damageSound: {fileID: 61960510}
   attackSound: {fileID: 61960512}
   deadSound: {fileID: 61960511}
+  enemyID: 
+  lives: 3
+  currentLives: 0
   isAttacking: 0
   isDamage: 0
   isDeath: 0
@@ -20546,7 +20549,7 @@ GameObject:
   - component: {fileID: 439061880}
   - component: {fileID: 439061879}
   m_Layer: 6
-  m_Name: Centipede (4)
+  m_Name: Centipede4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20895,6 +20898,9 @@ MonoBehaviour:
   damageSound: {fileID: 439061881}
   attackSound: {fileID: 439061880}
   deadSound: {fileID: 439061879}
+  enemyID: 
+  lives: 3
+  currentLives: 0
   isAttacking: 0
   isDamage: 0
   isDeath: 0
@@ -71273,6 +71279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeGameObject: {fileID: 1748760575}
+  chestID: 
 --- !u!61 &941792268
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -72309,7 +72316,7 @@ GameObject:
   - component: {fileID: 1132004720}
   - component: {fileID: 1132004719}
   m_Layer: 6
-  m_Name: Centipede (3)
+  m_Name: Centipede5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -72658,6 +72665,9 @@ MonoBehaviour:
   damageSound: {fileID: 1132004721}
   attackSound: {fileID: 1132004720}
   deadSound: {fileID: 1132004719}
+  enemyID: 
+  lives: 3
+  currentLives: 0
   isAttacking: 0
   isDamage: 0
   isDeath: 0
@@ -74326,6 +74336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   activeGameObject: {fileID: 733596769}
+  chestID: 
 --- !u!95 &1329883442
 Animator:
   serializedVersion: 7
@@ -75101,7 +75112,7 @@ GameObject:
   - component: {fileID: 1476298516}
   - component: {fileID: 1476298515}
   m_Layer: 6
-  m_Name: Centipede (1)
+  m_Name: Centipede2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75450,6 +75461,9 @@ MonoBehaviour:
   damageSound: {fileID: 1476298517}
   attackSound: {fileID: 1476298516}
   deadSound: {fileID: 1476298515}
+  enemyID: 
+  lives: 3
+  currentLives: 0
   isAttacking: 0
   isDamage: 0
   isDeath: 0
@@ -76613,7 +76627,7 @@ GameObject:
   - component: {fileID: 1587969273}
   - component: {fileID: 1587969272}
   m_Layer: 6
-  m_Name: Centipede (2)
+  m_Name: Centipede3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76962,6 +76976,9 @@ MonoBehaviour:
   damageSound: {fileID: 1587969274}
   attackSound: {fileID: 1587969273}
   deadSound: {fileID: 1587969272}
+  enemyID: 
+  lives: 3
+  currentLives: 0
   isAttacking: 0
   isDamage: 0
   isDeath: 0
@@ -79433,7 +79450,7 @@ GameObject:
   - component: {fileID: 1911978728}
   m_Layer: 0
   m_Name: LevelTransition
-  m_TagString: Untagged
+  m_TagString: Respawn
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -79513,6 +79530,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelTransition
   interactPrompt: {fileID: 1957144815}
   sceneName: Level2
+  spawnPoint: {fileID: 1911978726}
 --- !u!1 &1921779495
 GameObject:
   m_ObjectHideFlags: 0

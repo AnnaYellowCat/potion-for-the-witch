@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Cauldron : MonoBehaviour
 {
     private bool isPlayerInRange = false;
     private GameObject hintPanel;
+
+    private GameStateManager gameState;
 
     private void Start()
     {
@@ -15,12 +18,23 @@ public class Cauldron : MonoBehaviour
             hintPanel = hintTransform.gameObject;
             hintPanel.SetActive(false);
         }
+
+        gameState = FindFirstObjectByType<GameStateManager>();
     }
 
     private void Update()
     {
         if (isPlayerInRange && Input.GetKeyDown(KeyCode.E))
         {
+            if (gameState != null)
+            {
+                Hero hero = FindFirstObjectByType<Hero>();
+                if (hero != null)
+                {
+                    gameState.SaveGameState(hero, SceneManager.GetActiveScene().name);
+                }
+            }
+
             Hero.Instance.isOver = true;
         }
     }
