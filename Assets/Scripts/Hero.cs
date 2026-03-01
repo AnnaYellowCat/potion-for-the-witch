@@ -118,7 +118,7 @@ public class Hero : MonoBehaviour
         }
 
         if(isOver == true){
-            if(amountRight == 3){
+            if(amountRight == 5){
                 Manag.LoadScene("WinFull");
                 // КОТИК ПРИНЕС ВСЕ НУЖНЫЕ ПРЕДМЕТЫ, ВСЕ ПРАВИЛЬНО, ПОБЕДА--------------------------------------------------------------------------------------------------------
             }
@@ -248,6 +248,30 @@ public class Hero : MonoBehaviour
         if (!isDeath){
             damageSound.Play(); //дали по бошке
         }
+    }
+    public double GetCurrentHealth()
+    {
+        return lives;
+    }
+
+    public void SetHealth(double health)
+    {
+        lives = health;
+        helth = lives;
+        UpdateHearts();
+    }
+
+    private void UpdateHearts()
+    {
+        for (int i = 0; i < hearts.Length; i++)
+        {
+            hearts[i].sprite = (i < helth) ? aliveHeart : deadHeart;
+        }
+    }
+
+    public void SetPosition(Vector2 position)
+    {
+        transform.position = position;
     }
 
 }

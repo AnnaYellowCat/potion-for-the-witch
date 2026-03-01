@@ -1,17 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Collections;
 
 public class LevelTransition : MonoBehaviour
 {
     private GameManager Manag;
+    private GameStateManager gameState;
     [SerializeField] public GameObject interactPrompt;
     [SerializeField] public string sceneName;
+    [SerializeField] public string spawnPointTag = "Respawn";
     private bool isPlayerInZone = false;
 
     void Start()
     {
         Manag = FindFirstObjectByType<GameManager>();
+        gameState = FindFirstObjectByType<GameStateManager>();
+
         if (interactPrompt != null)
         {
             interactPrompt.SetActive(false);
@@ -22,8 +27,24 @@ public class LevelTransition : MonoBehaviour
     {
         if (isPlayerInZone && Input.GetKeyDown(KeyCode.E))
         {
-            Manag.LoadScene(sceneName);
+            TransitionToNextLevel();
         }
+    }
+
+    private void TransitionToNextLevel()
+    {
+        Hero hero = FindFirstObjectByType<Hero>();
+        if (hero != null && gameState != null)
+        {
+            gameState.SaveGameState(hero, SceneManager.GetActiveScene().name);
+
+            gameState.SaveCurrentSceneState();
+
+            gameState.nextSpawnPointTag = spawnPointTag;
+            gameState.isRespawning = true;
+        }
+
+        Manag.LoadScene(sceneName);
     }
 
     void OnTriggerEnter2D(Collider2D other)

@@ -10,17 +10,23 @@ public class Centipede : MonoBehaviour
 
     private Animator anim;
 
+    private Vector3 savedPosition;
+    private Vector3 savedDirection;
+    private bool savedFlipX;
+
     public static Centipede Instance {get; set; }
 
     private float speed = 1.5f;
     private Vector3 dir;
     private SpriteRenderer sprite;
-    private int lives = 3;
+
+    [SerializeField] private int lives = 3;
+    public int currentLives;
 
     public bool isAttacking = false;
     public bool isDamage = false;
     public bool isDeath = false;
-    public bool isMusDead = true; //чтобы мелодия смерти не проигрывалась несколько раз
+    public bool isMusDead = true;
 
     private StatesEnemy State
     {
@@ -32,6 +38,7 @@ public class Centipede : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         sprite = GetComponent<SpriteRenderer>();
+        currentLives = lives;
     }
 
     void Start()
@@ -41,7 +48,11 @@ public class Centipede : MonoBehaviour
 
     void Update()
     {
-        Move();
+        if (!isDeath)
+        {
+            Move();
+        }
+
         if (!isAttacking && !isDamage && !isDeath) State = StatesEnemy.idle;
 
         if (isDamage == true)
@@ -53,7 +64,7 @@ public class Centipede : MonoBehaviour
         {
             if (isMusDead)
             {
-                deadSound.Play(); //звуки смерти
+                if (deadSound != null) deadSound.Play();
                 isMusDead = false;
             }
             DeathAnimation();
@@ -88,7 +99,6 @@ public class Centipede : MonoBehaviour
     {
         if (collision.gameObject == Hero.Instance.gameObject)
         {
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, Time.deltaTime * speed);
             if (GameObject.Find("Hero").transform.position.x < this.transform.position.x && dir.x > 0.0f){
                 dir *= -1f;
                 sprite.flipX = false;
@@ -107,7 +117,7 @@ public class Centipede : MonoBehaviour
 
             isAttacking = true;
             State = StatesEnemy.attack;
-            attackSound.Play();
+            if (attackSound != null) attackSound.Play();
             StartCoroutine(AttackAnimation());
         }
         else
@@ -125,9 +135,7 @@ public class Centipede : MonoBehaviour
     private void DamageAnimation()
     {
         State = StatesEnemy.takeDamage;
-
         StartCoroutine(TakeDamageAnimation());
-
     }
 
     private IEnumerator TakeDamageAnimation(){
@@ -138,27 +146,63 @@ public class Centipede : MonoBehaviour
     private void DeathAnimation()
     {
         State = StatesEnemy.death;
-
         StartCoroutine(TakeDeathAnimation());
-
     }
 
     private IEnumerator TakeDeathAnimation(){
         yield return new WaitForSeconds(0.8f);
-        Destroy(this.gameObject);
+        gameObject.SetActive(false);
     }
-    
+
     public void GetDamage()
     {
-        lives--;
+        currentLives--;
+        lives = currentLives;
         isDamage = true;
-        if (lives < 1)
+
+        if (currentLives < 1)
         {
             isDeath = true;
         }
-        if (!isDeath){
-            damageSound.Play(); //дали по бошке
+        if (!isDeath && damageSound != null){
+            damageSound.Play();
         }
+    }
+
+    public void SaveState()
+    {
+        savedPosition = transform.position;
+        savedDirection = dir;
+        savedFlipX = sprite.flipX;
+    }
+
+    public void SetLives(int newLives)
+    {
+        currentLives = newLives;
+        lives = newLives;
+
+        if (currentLives <= 0)
+        {
+            isDeath = true;
+//            Destroy(gameObject);
+            gameObject.SetActive(false);
+        }
+    }
+
+    public Vector3 GetDirection()
+    {
+        return dir;
+    }
+
+    public bool GetFlipX()
+    {
+        return sprite.flipX;
+    }
+
+    public void RestoreMovement(Vector3 direction, bool flipX)
+    {
+        dir = direction;
+        sprite.flipX = flipX;
     }
 }
 
