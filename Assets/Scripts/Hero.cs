@@ -118,7 +118,7 @@ public class Hero : MonoBehaviour
         }
 
         if(isOver == true){
-            if(amountRight == 3){
+            if(amountRight == 5){
                 Manag.LoadScene("WinFull");
                 // КОТИК ПРИНЕС ВСЕ НУЖНЫЕ ПРЕДМЕТЫ, ВСЕ ПРАВИЛЬНО, ПОБЕДА--------------------------------------------------------------------------------------------------------
             }
