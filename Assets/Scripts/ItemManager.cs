@@ -100,8 +100,6 @@ public class ItemManager : MonoBehaviour
             if (!hasLevel2Items)
             {
                 CollectItemsFromCurrentScene();
-
-                Debug.Log("Добавлены предметы со второй сцены, целевые предметы сохранены");
             }
         }
 
@@ -181,26 +179,24 @@ public class ItemManager : MonoBehaviour
     private void FindInventorySlots()
     {
         GameObject[] slots = GameObject.FindGameObjectsWithTag("InventorySlot");
-
         if (slots.Length > 0)
         {
             inventorySlots = slots.OrderBy(s => s.name).ToArray();
+            return;
         }
-        else
+
+        List<GameObject> foundSlots = new List<GameObject>();
+        for (int i = 1; i <= maxInventorySize; i++)
         {
-            List<GameObject> foundSlots = new List<GameObject>();
-            for (int i = 1; i <= maxInventorySize; i++)
+            GameObject slot = GameObject.Find($"Slot{i}");
+            if (slot != null)
             {
-                GameObject slot = GameObject.Find($"Slot{i}");
-                if (slot != null)
-                {
-                    foundSlots.Add(slot);
-                }
+                foundSlots.Add(slot);
             }
-            if (foundSlots.Count > 0)
-            {
-                inventorySlots = foundSlots.OrderBy(s => s.name).ToArray();
-            }
+        }
+        if (foundSlots.Count > 0)
+        {
+            inventorySlots = foundSlots.OrderBy(s => s.name).ToArray();
         }
     }
 
@@ -215,6 +211,7 @@ public class ItemManager : MonoBehaviour
 
         foreach (var slot in inventorySlots)
         {
+            if (slot == null) continue;
             Transform itemTransform = slot.transform.Find("Item");
             if (itemTransform != null)
             {
@@ -230,16 +227,16 @@ public class ItemManager : MonoBehaviour
         for (int i = 0; i < inventoryItems.Count && i < inventorySlots.Length; i++)
         {
             ItemData item = inventoryItems[i];
-            Transform itemTransform = inventorySlots[i].transform.Find("Item");
+            GameObject slot = inventorySlots[i];
+            if (slot == null) continue; // защита
+            Transform itemTransform = slot.transform.Find("Item");
+            if (itemTransform == null) continue;
 
-            if (itemTransform != null)
+            SpriteRenderer itemSprite = itemTransform.GetComponent<SpriteRenderer>();
+            if (itemSprite != null && itemSprites != null && item.spriteIndex < itemSprites.Length)
             {
-                SpriteRenderer itemSprite = itemTransform.GetComponent<SpriteRenderer>();
-                if (itemSprite != null && itemSprites != null && item.spriteIndex < itemSprites.Length)
-                {
-                    itemSprite.sprite = itemSprites[item.spriteIndex];
-                    itemSprite.enabled = true;
-                }
+                itemSprite.sprite = itemSprites[item.spriteIndex];
+                itemSprite.enabled = true;
             }
         }
     }
