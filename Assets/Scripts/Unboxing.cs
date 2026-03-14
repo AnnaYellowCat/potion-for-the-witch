@@ -62,6 +62,12 @@ public class Unboxing : MonoBehaviour
         if (activeGameObject != null)
         {
             activeGameObject.SetActive(true);
+
+            ItemManager itemManager = FindFirstObjectByType<ItemManager>();
+            if (itemManager != null)
+            {
+                itemManager.ApplyItemsState();
+            }
         }
     }
 
@@ -82,12 +88,14 @@ public class Unboxing : MonoBehaviour
         {
             GameObject item = itemTransform.gameObject;
 
-            string itemName = item.name;
-
-            Objects objectsScript = FindObjectOfType<Objects>();
+            Objects objectsScript = FindFirstObjectByType<Objects>();
             if (objectsScript != null)
             {
                 objectsScript.TakeChestItem(item);
+            }
+            else
+            {
+                Debug.LogError("Objects script not found!");
             }
         }
     }
@@ -139,6 +147,12 @@ public class Unboxing : MonoBehaviour
         if (hintPanel != null)
         {
             hintPanel.SetActive(false);
+        }
+
+        ItemManager itemManager = FindFirstObjectByType<ItemManager>();
+        if (itemManager != null)
+        {
+            itemManager.ApplyItemsState();
         }
     }
 }

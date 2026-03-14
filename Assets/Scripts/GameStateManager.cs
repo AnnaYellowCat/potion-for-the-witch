@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
 public class GameStateManager : MonoBehaviour
 {
     private static GameStateManager instance;
+    private ItemManager itemManager;
 
     public Vector2 playerPosition;
     public double playerHealth;
@@ -20,6 +22,7 @@ public class GameStateManager : MonoBehaviour
         public Dictionary<string, bool> chests = new Dictionary<string, bool>();
         public Dictionary<string, EnemyState> enemies = new Dictionary<string, EnemyState>();
         public Dictionary<string, bool> items = new Dictionary<string, bool>();
+        public List<InventoryItemState> inventoryItems = new List<InventoryItemState>();
     }
 
     [System.Serializable]
@@ -30,6 +33,13 @@ public class GameStateManager : MonoBehaviour
         public Vector3 direction;
         public bool flipX;
         public bool isDead;
+    }
+
+    [System.Serializable]
+    public struct InventoryItemState
+    {
+        public string uniqueId;
+        public int slotIndex;
     }
 
     public Dictionary<string, SceneState> scenesState = new Dictionary<string, SceneState>();
@@ -46,6 +56,14 @@ public class GameStateManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         SceneManager.sceneLoaded += OnSceneLoaded;
+
+        itemManager = FindFirstObjectByType<ItemManager>();
+        if (itemManager == null)
+        {
+            GameObject itemManagerObj = new GameObject("ItemManager");
+            itemManager = itemManagerObj.AddComponent<ItemManager>();
+            DontDestroyOnLoad(itemManagerObj);
+        }
     }
 
     private void OnDestroy()
@@ -55,11 +73,6 @@ public class GameStateManager : MonoBehaviour
 
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "Level1" && !isRespawning)
-        {
-            StartNewGame();
-        }
-
         if (isRespawning)
         {
             StartCoroutine(RestoreSceneState(scene.name));
@@ -86,33 +99,10 @@ public class GameStateManager : MonoBehaviour
                 }
             }
 
-            GameObject[] sceneItems = GameObject.FindGameObjectsWithTag("Item");
-            GameObject[] chestItems = GameObject.FindGameObjectsWithTag("ChestItem");
-
-            List<GameObject> allItems = new List<GameObject>();
-            allItems.AddRange(sceneItems);
-            allItems.AddRange(chestItems);
-
-
-            foreach (var item in allItems)
+            if (itemManager != null)
             {
-                string itemName = item.name;
-
-                Unboxing parentChest = item.GetComponentInParent<Unboxing>();
-                if (parentChest != null)
-                {
-                    itemName = parentChest.gameObject.name + "_" + item.name;
-                }
-
-                if (sceneState.items.ContainsKey(itemName) && !sceneState.items[itemName])
-                {
-                    item.SetActive(false);
-                }
-                else if (!sceneState.items.ContainsKey(itemName))
-                {
-
-                    item.SetActive(false);
-                }
+                itemManager.RestoreItemsStateFromGameState(this, sceneName);
+                itemManager.ApplyItemsState();
             }
 
             Centipede[] enemies = FindObjectsByType<Centipede>(FindObjectsSortMode.None);
@@ -139,41 +129,17 @@ public class GameStateManager : MonoBehaviour
                         enemy.isDeath = false;
                     }
                 }
-                else
-                {
-                    enemy.gameObject.SetActive(false);
-                    enemy.isDeath = true;
-                }
-            }
-        }
-        else
-        {
-
-            Centipede[] enemies = FindObjectsByType<Centipede>(FindObjectsSortMode.None);
-            foreach (var enemy in enemies)
-            {
-                enemy.gameObject.SetActive(true);
-                enemy.SetLives(3);
-                enemy.isDeath = false;
-            }
-
-            GameObject[] allItems = GameObject.FindGameObjectsWithTag("Item");
-            foreach (var item in allItems)
-            {
-                item.SetActive(true);
             }
         }
 
         isRespawning = false;
         nextSpawnPointTag = "";
-
     }
 
     public void SaveCurrentSceneState()
     {
         Scene currentScene = SceneManager.GetActiveScene();
         string sceneName = currentScene.name;
-
 
         if (!scenesState.ContainsKey(sceneName))
         {
@@ -186,34 +152,18 @@ public class GameStateManager : MonoBehaviour
         sceneState.items.Clear();
 
         Unboxing[] chests = FindObjectsByType<Unboxing>(FindObjectsSortMode.None);
-
         foreach (var chest in chests)
         {
             string objectName = chest.gameObject.name;
             sceneState.chests[objectName] = chest.IsOpened;
         }
 
-        GameObject[] sceneItems = GameObject.FindGameObjectsWithTag("Item");
-        GameObject[] chestItems = GameObject.FindGameObjectsWithTag("ChestItem");
-
-
-        foreach (var item in sceneItems)
+        if (itemManager != null)
         {
-            string itemName = item.name;
-            bool exists = item.activeInHierarchy;
-            sceneState.items[itemName] = exists;
-        }
-
-        foreach (var item in chestItems)
-        {
-            Unboxing parentChest = item.GetComponentInParent<Unboxing>();
-            string itemName = parentChest != null ? parentChest.gameObject.name + "_" + item.name : item.name;
-            bool exists = item.activeInHierarchy;
-            sceneState.items[itemName] = exists;
+            itemManager.SaveItemsStateToGameState(this, sceneName);
         }
 
         Centipede[] enemies = FindObjectsByType<Centipede>(FindObjectsSortMode.None);
-
         foreach (var enemy in enemies)
         {
             if (enemy.gameObject.activeInHierarchy)
@@ -231,9 +181,7 @@ public class GameStateManager : MonoBehaviour
                 isDead = enemy.isDeath
             };
             sceneState.enemies[objectName] = state;
-
         }
-
     }
 
     private void RestorePlayerPosition()
@@ -261,7 +209,6 @@ public class GameStateManager : MonoBehaviour
             hero.SetHealth(playerHealth);
             hero.amount = collectedItems;
             hero.amountRight = correctItems;
-
         }
     }
 
@@ -287,5 +234,11 @@ public class GameStateManager : MonoBehaviour
         collectedItems = 0;
         correctItems = 0;
         nextSpawnPointTag = "";
+
+        ItemManager itemManager = FindFirstObjectByType<ItemManager>();
+        if (itemManager != null)
+        {
+            itemManager.ResetForNewGame();
+        }
     }
 }

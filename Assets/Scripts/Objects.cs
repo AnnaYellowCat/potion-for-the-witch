@@ -6,38 +6,47 @@ using UnityEngine.UI;
 public class Objects : MonoBehaviour
 {
     [SerializeField] private AudioSource miskSound;
+    private ItemManager itemManager;
+
+    private void Start()
+    {
+        itemManager = FindFirstObjectByType<ItemManager>();
+    }
 
     private void OnTriggerEnter2D(Collider2D coll)
     {
         if (coll.gameObject.tag == "Item")
         {
-            string itemName = coll.gameObject.name;
-
-            miskSound.Play();
-
-            Hero.Instance.amount = Hero.Instance.amount + 1;
-
-            Destroy(coll.gameObject);
+            CollectItem(coll.gameObject);
         }
     }
 
     public void TakeChestItem(GameObject chestItem)
     {
-        if (Hero.Instance.amount < 5)
+        CollectItem(chestItem);
+    }
+
+    private void CollectItem(GameObject item)
+    {
+        if (itemManager == null)
         {
-            string itemName = chestItem.name;
+            itemManager = FindFirstObjectByType<ItemManager>();
+        }
+
+        bool added = itemManager.AddItemToInventory(item);
+
+        if (added)
+        {
+            miskSound.Play();
 
             Hero.Instance.amount++;
 
-            if (chestItem.CompareTag("RightItem"))
+            if (itemManager.IsItemTarget(item))
             {
                 Hero.Instance.amountRight++;
             }
 
-            if (miskSound != null)
-                miskSound.Play();
-
-            Destroy(chestItem);
+            Destroy(item);
         }
     }
 }

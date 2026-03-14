@@ -10,6 +10,17 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(sceneName);
     }
 
+    public void RestartGame()
+        {
+            GameStateManager gsm = FindFirstObjectByType<GameStateManager>();
+            if (gsm != null)
+            {
+                gsm.StartNewGame();
+            }
+
+            SceneManager.LoadScene("Level1");
+        }
+
     public void ExitGame()
     {
         Application.Quit();
