@@ -44,6 +44,8 @@ public class LevelTransition : MonoBehaviour
             gameState.isRespawning = true;
         }
 
+        ItemManager itemManager = FindFirstObjectByType<ItemManager>();
+
         Manag.LoadScene(sceneName);
     }
 

@@ -118,6 +118,7 @@ public class Hero : MonoBehaviour
         }
 
         if(isOver == true){
+            Debug.Log("Правильных предметов: " + amountRight);
             if(amountRight == 5){
                 Manag.LoadScene("WinFull");
                 // КОТИК ПРИНЕС ВСЕ НУЖНЫЕ ПРЕДМЕТЫ, ВСЕ ПРАВИЛЬНО, ПОБЕДА--------------------------------------------------------------------------------------------------------
@@ -176,9 +177,13 @@ public class Hero : MonoBehaviour
     private void OnAttack()
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(attackPos.position, attackRange, enemy);
-        for (int i = 0; i<colliders.Length; i++)
+        for (int i = 0; i < colliders.Length; i++)
         {
-            colliders[i].GetComponent<Centipede>().GetDamage();
+            Centipede centipede = colliders[i].GetComponent<Centipede>();
+            if (centipede != null)
+            {
+                centipede.GetDamage();
+            }
         }
     }
 
