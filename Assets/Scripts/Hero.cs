@@ -86,7 +86,7 @@ public class Hero : MonoBehaviour
         {
             Jump();
         }
-        if (Input.GetKey(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             Attack();
         }
@@ -164,7 +164,10 @@ public class Hero : MonoBehaviour
 
     private void Attack()
     {
-        attackSound.Play(); //звук атаки
+        if (!isRecharged || isAttacking || isDamage || isDeath)
+            return;
+
+        attackSound.Play(); // звук атаки
 
         State = States.attack;
         isAttacking = true;
@@ -193,7 +196,7 @@ public class Hero : MonoBehaviour
     }
 
     private IEnumerator AttackCoolDown(){
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
         isRecharged = true;
     }
 

@@ -83,7 +83,10 @@ public class GameStateManager : MonoBehaviour
     {
         yield return new WaitForEndOfFrame();
 
-        RestorePlayerPosition();
+        if (isRespawning)
+        {
+            RestorePlayerPosition();
+        }
 
         if (scenesState.ContainsKey(sceneName))
         {
@@ -105,8 +108,7 @@ public class GameStateManager : MonoBehaviour
                 itemManager.ApplyItemsState();
             }
 
-            Centipede[] enemies = FindObjectsByType<Centipede>(FindObjectsSortMode.None);
-
+            Centipede[] enemies = FindObjectsByType<Centipede>(FindObjectsInactive.Include, FindObjectsSortMode.None);
             foreach (var enemy in enemies)
             {
                 string objectName = enemy.gameObject.name;
@@ -163,13 +165,10 @@ public class GameStateManager : MonoBehaviour
             itemManager.SaveItemsStateToGameState(this, sceneName);
         }
 
-        Centipede[] enemies = FindObjectsByType<Centipede>(FindObjectsSortMode.None);
+        Centipede[] enemies = FindObjectsByType<Centipede>(FindObjectsInactive.Include, FindObjectsSortMode.None);
         foreach (var enemy in enemies)
         {
-            if (enemy.gameObject.activeInHierarchy)
-            {
-                enemy.SaveState();
-            }
+            enemy.SaveState();
 
             string objectName = enemy.gameObject.name;
             EnemyState state = new EnemyState
