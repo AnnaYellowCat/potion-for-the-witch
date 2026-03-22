@@ -139,7 +139,7 @@ public class Centipede : MonoBehaviour
     }
 
     private IEnumerator TakeDamageAnimation(){
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(0.7f);
         isDamage = false;
     }
 
@@ -156,6 +156,21 @@ public class Centipede : MonoBehaviour
 
     public void GetDamage()
     {
+        if (isDamage || isDeath)
+            return;
+
+        if (Hero.Instance != null)
+        {
+            float dirX = dir.x;
+            float toHeroX = Mathf.Sign(Hero.Instance.transform.position.x - transform.position.x);
+
+            if (dirX != toHeroX)
+            {
+                dir.x = toHeroX;
+                sprite.flipX = dir.x > 0f;
+            }
+        }
+
         currentLives--;
         lives = currentLives;
         isDamage = true;
@@ -164,7 +179,8 @@ public class Centipede : MonoBehaviour
         {
             isDeath = true;
         }
-        if (!isDeath && damageSound != null){
+        if (!isDeath && damageSound != null)
+        {
             damageSound.Play();
         }
     }
