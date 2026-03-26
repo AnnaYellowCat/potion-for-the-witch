@@ -21,8 +21,8 @@ public class Hero : MonoBehaviour
     
     private double lives = 5;
     private double helth;
-    public float speed = 500f;
-    public float jumpForce = 15f;
+    public float speed = 10f;
+    public float jumpForce = 10f;
     private bool isGrounded = false;
 
     public Image[] hearts;
