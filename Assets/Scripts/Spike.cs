@@ -4,27 +4,30 @@ using UnityEngine;
 
 public class Spike : MonoBehaviour
 {
-    [SerializeField] private float damageInterval = 0.7f;
+    [SerializeField] private float damageInterval = 1f;
     private bool isHeroOnSpike = false;
     private Coroutine damageCoroutine;
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        if (collision.gameObject == Hero.Instance.gameObject)
+        if (other.gameObject == Hero.Instance.gameObject)
         {
             isHeroOnSpike = true;
 
-            Hero.Instance.GetDamage();
-            Hero.Instance.isDamage = true;
+            if (Hero.Instance != null)
+            {
+                Hero.Instance.GetDamage();
+                Hero.Instance.isDamage = true;
+            }
 
             if (damageCoroutine == null)
                 damageCoroutine = StartCoroutine(PeriodicDamage());
         }
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D other)
     {
-        if (collision.gameObject == Hero.Instance.gameObject)
+        if (other.gameObject == Hero.Instance.gameObject)
         {
             isHeroOnSpike = false;
 

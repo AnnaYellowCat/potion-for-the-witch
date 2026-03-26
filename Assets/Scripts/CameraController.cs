@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour
 {
     private Transform player;
     private Vector3 pos;
+    private float cameraMovingSpeed = 5f;
 
     private void Awake()
     {
@@ -17,12 +18,7 @@ public class CameraController : MonoBehaviour
 
     private void Update()
     {
-        Vector3 temp = transform.position;
-        pos = player.position;
-        pos.z = -10f;
-        temp.x = player.position.x;
-        temp.y = player.position.y;
-        transform.position = temp;
-        //transform.position = Vector3.Lerp(transform.position, pos, Time.deltaTime);
+        Vector3 newCameraPosition = new Vector3(player.position.x, player.position.y, -10f);
+        transform.position = Vector3.Lerp(transform.position, newCameraPosition, cameraMovingSpeed * Time.deltaTime);
     }
 }
